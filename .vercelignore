@@ -1,0 +1,17 @@
+# Vercel Deployment Exclusions to optimize Lambda function size (< 250MB)
+docs/
+data/
+scripts/
+tests/
+models_saved/transformer_checkpoint/
+requirements-train.txt
+run_*.bat
+*.pptx
+*.docx
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.zip
+scratch/
+.streamlit/

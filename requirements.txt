@@ -1,12 +1,8 @@
-# Production Web Application & Inference Requirements (Optimized for Vercel & Streamlit Cloud)
 flask>=2.3.0
 scikit-learn>=1.2.0
 numpy>=1.24.0
-pandas>=2.0.0
-streamlit>=1.30.0
 python-docx>=0.8.11
 python-pptx>=0.6.21
 pypdf>=3.17.0
 pillow>=9.5.0
 requests>=2.28.0
-tqdm>=4.66.0
