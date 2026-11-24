@@ -40,6 +40,16 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/test_env", methods=["GET", "POST"])
+def test_env():
+    return jsonify({
+        "path": request.path,
+        "method": request.method,
+        "environ_path": request.environ.get("PATH_INFO"),
+        "headers": dict(request.headers)
+    })
+
+
 @app.route("/upload_media", methods=["POST"])
 @app.route("/api/index/upload_media", methods=["POST"])
 def upload_media():
