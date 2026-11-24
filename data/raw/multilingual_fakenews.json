@@ -1,0 +1,178 @@
+[
+  {
+    "id": "EN-001",
+    "text": "World Health Organization announces updated international health guidelines following global clinical trials.",
+    "language": "en",
+    "label": "REAL",
+    "source": "Reuters Health",
+    "domain": "Health & Science"
+  },
+  {
+    "id": "EN-002",
+    "text": "SHOCKING SECRET: Drinking boiled lemon juice with garlic cures all viruses in 24 hours guaranteed!",
+    "language": "en",
+    "label": "FAKE",
+    "source": "Viral Social Media",
+    "domain": "Health & Science"
+  },
+  {
+    "id": "EN-003",
+    "text": "NASA's James Webb Space Telescope captures unprecedented deep space images of early galaxy formations.",
+    "language": "en",
+    "label": "REAL",
+    "source": "NASA Press Release",
+    "domain": "Astronomy"
+  },
+  {
+    "id": "EN-004",
+    "text": "NASA secretly admits the Earth is flat and all lunar landings were filmed in a Hollywood soundstage.",
+    "language": "en",
+    "label": "FAKE",
+    "source": "Conspiracy Blog",
+    "domain": "Conspiracy"
+  },
+  {
+    "id": "EN-005",
+    "text": "Central Reserve Bank holds key benchmark interest rates steady after quarterly monetary policy review.",
+    "language": "en",
+    "label": "REAL",
+    "source": "Financial Times",
+    "domain": "Economy"
+  },
+  {
+    "id": "EN-006",
+    "text": "URGENT WARNING: The government is cancelling all 500 currency notes midnight tonight, forward to everyone immediately!",
+    "language": "en",
+    "label": "FAKE",
+    "source": "WhatsApp Forward",
+    "domain": "Economy"
+  },
+  {
+    "id": "HI-001",
+    "text": "भारतीय अंतरिक्ष अनुसंधान संगठन (ISRO) ने मौसम उपग्रह का सफल प्रक्षेपण किया।",
+    "language": "hi",
+    "label": "REAL",
+    "source": "DD News",
+    "domain": "Science & Tech"
+  },
+  {
+    "id": "HI-002",
+    "text": "सनसनीखेज दावा: इस चमत्कारिक पौधे की पत्तियां चबाने से 3 दिन में कैंसर पूरी तरह गायब हो जाता है!",
+    "language": "hi",
+    "label": "FAKE",
+    "source": "Social Media Viral",
+    "domain": "Health"
+  },
+  {
+    "id": "HI-003",
+    "text": "भारतीय मौसम विज्ञान विभाग ने तटीय राज्यों के लिए भारी बारिश का येलो अलर्ट जारी किया।",
+    "language": "hi",
+    "label": "REAL",
+    "source": "Press Information Bureau",
+    "domain": "Environment"
+  },
+  {
+    "id": "HI-004",
+    "text": "सावधान! सरकार सभी नागरिकों के बैंक खातों से प्रति माह 1000 रुपये काटने जा रही है, तुरंत शेयर करें।",
+    "language": "hi",
+    "label": "FAKE",
+    "source": "WhatsApp Forward",
+    "domain": "Economy"
+  },
+  {
+    "id": "HI-005",
+    "text": "संसद के संयुक्त सत्र में नई राष्ट्रीय शिक्षा नीति के क्रियान्वयन पर विस्तृत चर्चा हुई।",
+    "language": "hi",
+    "label": "REAL",
+    "source": "Sansad TV",
+    "domain": "Education & Politics"
+  },
+  {
+    "id": "HI-006",
+    "text": "बड़ी खबर: 5G टावरों से निकलने वाली तरंगें पक्षियों को तुरंत मार रही हैं और हवा में जहर घोल रही हैं!",
+    "language": "hi",
+    "label": "FAKE",
+    "source": "Social Media Viral",
+    "domain": "Science & Tech"
+  },
+  {
+    "id": "BN-001",
+    "text": "কলকাতা বিশ্ববিদ্যালয়ের গবেষকরা পরিবেশবান্ধব নতুন সৌরশক্তি সেল উদ্ভাবন করেছেন।",
+    "language": "bn",
+    "label": "REAL",
+    "source": "Anandabazar Patrika",
+    "domain": "Science & Tech"
+  },
+  {
+    "id": "BN-002",
+    "text": "চাঞ্চল্যকর আবিষ্কার: লবঙ্গ ও মধুর মিশ্রণ খেলে ডায়াবেটিস ২৪ ঘণ্টায় চিরতরে ভালো হয়ে যায়!",
+    "language": "bn",
+    "label": "FAKE",
+    "source": "Viral Facebook Post",
+    "domain": "Health"
+  },
+  {
+    "id": "BN-003",
+    "text": "পশ্চিমবঙ্গ স্কুল সার্ভিস কমিশন নতুন নিয়োগ পরীক্ষার সময়সূচি প্রকাশ করেছে।",
+    "language": "bn",
+    "label": "REAL",
+    "source": "Official Gazette",
+    "domain": "Education"
+  },
+  {
+    "id": "BN-004",
+    "text": "জরুরি বার্তা: রাতের মধ্যে সব এটিএম বন্ধ করে দেওয়া হবে, এখনই টাকা তুলে নিন!",
+    "language": "bn",
+    "label": "FAKE",
+    "source": "Social Media Rumor",
+    "domain": "Economy"
+  },
+  {
+    "id": "ES-001",
+    "text": "El Ministerio de Sanidad actualiza los protocolos de vacunación infantil para la próxima temporada.",
+    "language": "es",
+    "label": "REAL",
+    "source": "El País",
+    "domain": "Health"
+  },
+  {
+    "id": "ES-002",
+    "text": "¡ALERTA MUNDIAL! Los microchips ocultos en el agua embotellada controlarán las mentes ciudadanas.",
+    "language": "es",
+    "label": "FAKE",
+    "source": "Viral Conspiracy",
+    "domain": "Conspiracy"
+  },
+  {
+    "id": "ES-003",
+    "text": "La Agencia Estatal de Meteorología prevé un descenso significativo de temperaturas este fin de semana.",
+    "language": "es",
+    "label": "REAL",
+    "source": "AEMET",
+    "domain": "Environment"
+  },
+  {
+    "id": "ES-004",
+    "text": "Científicos confirman que comer hielo en ayunas elimina cualquier enfermedad crónica al instante.",
+    "language": "es",
+    "label": "FAKE",
+    "source": "Clickbait Portal",
+    "domain": "Health"
+  },
+  {
+    "id": "FR-001",
+    "text": "L'Institut Pasteur publie les résultats prometteurs d'une étude clinique sur les thérapies ciblées.",
+    "language": "fr",
+    "label": "REAL",
+    "source": "Le Monde",
+    "domain": "Health & Science"
+  },
+  {
+    "id": "FR-002",
+    "text": "Révélation incroyable: les gouvernements interdisent la lumière solaire naturelle pour vendre des ampoules!",
+    "language": "fr",
+    "label": "FAKE",
+    "source": "Fake Viral Post",
+    "domain": "Conspiracy"
+  }
+]

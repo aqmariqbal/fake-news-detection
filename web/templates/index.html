@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <title>Fake News & Multilingual Fact-Checking Engine | Academic Demo</title>
+    <!-- Modern Sans-serif Font Stack: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-canvas: #f8fafc;
+            --card-bg: #ffffff;
+            --border-subtle: #e2e8f0;
+            --text-heading: #0f172a;
+            --text-body: #475569;
+            --text-muted: #64748b;
+            --accent-blue: #2563eb;
+            --accent-blue-hover: #1d4ed8;
+            --accent-green: #059669;
+            --green-bg: #ecfdf5;
+            --green-border: #a7f3d0;
+            --accent-red: #dc2626;
+            --red-bg: #fef2f2;
+            --red-border: #fecaca;
+            --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --radius-card: 12px;
+            --radius-input: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ----------------------------------------------------
+           1. Navigation Bar
+           ---------------------------------------------------- */
+        header.navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.875rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-container {
+            max-width: 840px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            text-decoration: none;
+            color: var(--text-heading);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .brand-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--accent-blue);
+        }
+
+        .nav-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .model-badge {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .model-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent-green);
+        }
+
+        /* ----------------------------------------------------
+           2. Main Page Layout (Centered Single-Column)
+           ---------------------------------------------------- */
+        main.main-content {
+            flex: 1;
+            max-width: 760px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 3.5rem 1.25rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .hero-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-body);
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* ----------------------------------------------------
+           3. Form & Card
+           ---------------------------------------------------- */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            padding: 1.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.45rem;
+        }
+
+        .form-hint {
+            font-size: 0.775rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .input-text,
+        .textarea-content {
+            width: 100%;
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            border: 1px solid #475569 !important;
+            border-radius: var(--radius-input);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .input-text::placeholder,
+        .textarea-content::placeholder {
+            color: #94a3b8 !important;
+            opacity: 0.9 !important;
+        }
+
+        .input-text:focus,
+        .textarea-content:focus {
+            border-color: var(--accent-blue) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+        }
+
+        .textarea-content {
+            min-height: 190px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        /* File Upload Box */
+        .upload-wrapper {
+            background-color: #ffffff;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .upload-wrapper:hover {
+            border-color: var(--accent-blue);
+            background-color: #f8fafc;
+        }
+
+        .upload-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upload-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-heading);
+        }
+
+        .upload-tip {
+            font-size: 0.775rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .file-input {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            cursor: pointer;
+            margin-top: 0.25rem;
+        }
+
+        .file-input::file-selector-button {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border: 1px solid var(--accent-blue-hover);
+            border-radius: 6px;
+            padding: 0.45rem 1.15rem;
+            font-size: 0.825rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+            transition: all 0.15s ease;
+        }
+
+        .file-input::file-selector-button:hover {
+            background-color: var(--accent-blue-hover);
+            box-shadow: 0 2px 5px rgba(37, 99, 235, 0.35);
+        }
+
+        .upload-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--accent-blue);
+            margin-top: 0.2rem;
+            display: none;
+        }
+
+        /* Quick Benchmark Buttons */
+        .benchmarks-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .benchmarks-label {
+            font-size: 0.775rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pill-btn {
+            background-color: #1e293b;
+            border: 1px solid #475569;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .pill-btn:hover {
+            background-color: #334155;
+            border-color: #64748b;
+        }
+
+        /* Action Buttons */
+        .btn-primary {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border: 1px solid #1d4ed8;
+            border-radius: var(--radius-input);
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-blue-hover);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.99);
+        }
+
+        .btn-primary:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ----------------------------------------------------
+           4. Dynamic Prediction Result Block
+           ---------------------------------------------------- */
+        #result-container {
+            margin-top: 1.75rem;
+            display: none;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #result-container.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .status-banner {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .status-banner.verified {
+            background-color: var(--green-bg);
+            border: 1px solid var(--green-border);
+            color: #065f46;
+        }
+
+        .status-banner.fake {
+            background-color: var(--red-bg);
+            border: 1px solid var(--red-border);
+            color: #991b1b;
+        }
+
+        .status-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 0.2rem 0.55rem;
+            border-radius: 4px;
+            letter-spacing: 0.04em;
+        }
+
+        .status-banner.verified .status-tag {
+            background-color: rgba(5, 150, 105, 0.15);
+            color: #047857;
+        }
+
+        .status-banner.fake .status-tag {
+            background-color: rgba(220, 38, 38, 0.15);
+            color: #b91c1c;
+        }
+
+        .fact-check-box {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.25rem;
+            color: #991b1b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        /* Confidence Progress */
+        .progress-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.35rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background-color: #f1f5f9;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-fill.verified {
+            background-color: var(--accent-green);
+        }
+
+        .progress-fill.fake {
+            background-color: var(--accent-red);
+        }
+
+        /* Analysis Metadata Two-Column Grid */
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metadata-card {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .metadata-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.2rem;
+        }
+
+        .metadata-val {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        /* Reset Button */
+        .btn-secondary {
+            width: 100%;
+            background-color: #ffffff;
+            color: var(--text-body);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-input);
+            padding: 0.65rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+            color: var(--text-heading);
+            border-color: #cbd5e1;
+        }
+
+        /* ----------------------------------------------------
+           5. Footer
+           ---------------------------------------------------- */
+        footer.footer {
+            background-color: #ffffff;
+            border-top: 1px solid var(--border-subtle);
+            padding: 1.75rem 1.5rem;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .footer-credit {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            margin-bottom: 0.25rem;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.775rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .metadata-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: 1.5rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand-block">
+                <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                </svg>
+                <span>Fake News & Multilingual Fact-Checking Engine</span>
+            </a>
+            <div class="nav-meta">
+                <span class="model-badge">Engine: Multilingual Passive-Aggressive + Knowledge XAI</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Main Page Layout -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Analyze News & Fact Credibility</h1>
+            <p class="hero-subtitle">
+                Verify general facts, claims, or full news articles across English, Odia, Hindi, Bengali, French, Spanish, German, Japanese, and 16+ languages in real time.
+            </p>
+        </section>
+
+        <!-- Centered Inference Card -->
+        <section class="card">
+            <form id="news-form">
+                <div class="form-group">
+                    <label for="sample-dropdown" class="form-label">
+                        Select a Current News Article or Global Report
+                    </label>
+                    <select id="sample-dropdown" class="input-text" style="cursor: pointer;">
+                        <option value="">-- Select a Current News Article or Global Report --</option>
+                        <option value="isro_gaganyaan">ISRO Gaganyaan: Propulsion System Successfully Qualified for Human Spaceflight (English)</option>
+                        <option value="rbi_security">Reserve Bank of India Issues New Digital Banking Cybersecurity Directives (English)</option>
+                        <option value="nasa_jwst">NASA James Webb Space Telescope Observes Atmospheric Water on Exoplanet (English)</option>
+                        <option value="fuel_ban">Viral Alert Claims Complete Nationwide Ban on Fossil Fuel Vehicles Next Month (English)</option>
+                        <option value="cure_herb">Viral Report: Rare Himalayan Mountain Herb Cures All Chronic Diseases in 24h (English)</option>
+                        <option value="cows">Biological Claim: 'Cows have 5 legs and can fly over mountains' (English)</option>
+                        <option value="water_temp">Thermodynamics Standard: Boiling and Freezing Points of Pure Water (English)</option>
+                        <option value="odia_it">ଓଡ଼ିଶାରେ ନୂତନ ସେମିକଣ୍ଡକ୍ଟର ଉତ୍ପାଦନ କେନ୍ଦ୍ର ଏବଂ ଆଇଟି ପାର୍କ ପ୍ରତିଷ୍ଠା (Odia)</option>
+                        <option value="odia_metro">ଭୁବନେଶ୍ୱର ମେଟ୍ରୋ ରେଳ ପ୍ରକଳ୍ପର ପ୍ରଥମ ପର୍ଯ୍ୟାୟ ନିର୍ମାଣ କାର୍ଯ୍ୟ ଦ୍ରୁତ ଗତିରେ ଜାରି (Odia)</option>
+                        <option value="odia_cure">ଭାଇରାଲ ଦାବି: ଏକ ବିଶେଷ ଚେର ଖାଇଲେ ସମସ୍ତ ପୁରୁଣା ରୋଗ ଗୋଟିଏ ରାତିରେ ଭଲ (Odia)</option>
+                        <option value="odia_cows">ଗାଈମାନଙ୍କର ୫ଟି ଗୋଡ଼ ଥାଏ ଏବଂ ସେମାନେ ଉଡ଼ିପାରନ୍ତି (Odia)</option>
+                        <option value="hindi_gaganyaan">इसरो गगनयान मिशन: अंतरिक्ष यात्रियों के लिए क्रू मॉड्यूल का सफल परीक्षण (Hindi)</option>
+                        <option value="hindi_rbi">आरबीआई ने डिजिटल भुगतान और ऑनलाइन बैंकिंग के लिए जारी किए नए दिशानिर्देश (Hindi)</option>
+                        <option value="hindi_cure">सोशल मीडिया दावा: हल्दी और गरम पानी पीने से कैंसर 24 घंटे में पूरी तरह खत्म (Hindi)</option>
+                        <option value="bengali_space">মহাকাশ গবেষণা ও গভীর অনুসন্ধান মিশনে ইসরোর ভবিষ্যৎ পরিকল্পনা ঘোষণা (Bengali)</option>
+                        <option value="bengali_cure">অনলাইন ভাইরাল পোস্ট: বিরল পাতার রসে ডায়াবেটিস একদিনেই পুরোপুরি নিরাময় (Bengali)</option>
+                        <option value="french_jwst">Le télescope spatial James Webb confirme la présence de molécules d'eau (French)</option>
+                        <option value="french_cure">Publication virale: Une plante rare guérit toutes les maladies en 24 heures (French)</option>
+                        <option value="spanish_who">La Organización Mundial de la Salud publica nuevos protocolos sanitarios (Spanish)</option>
+                        <option value="spanish_cure">Mensaje viral en redes: Planta milagrosa cura enfermedades de la noche a la mañana (Spanish)</option>
+                        <option value="german_energy">Bundesministerium beschließt wissenschaftliche Behandlungsstandards (German)</option>
+                        <option value="german_conspiracy">Viraler Kettenbrief: Geheime Sendemasten steuern menschliche Gedanken (German)</option>
+                        <option value="japanese_jaxa">JAXA探査機が小惑星からの物質採取ミッションに成功と発表 (Japanese)</option>
+                        <option value="japanese_cure">SNS拡散情報：政府が隠蔽する薬草が24時間で全難病を完治させるという主張 (Japanese)</option>
+                    </select>
+                </div>
+
+                <!-- Document / Image / PPT Uploader -->
+                <div class="upload-wrapper">
+                    <div class="upload-header">
+                        <span class="upload-label">📎 Upload Document, News Image/Screenshot, Presentation, or PDF</span>
+                    </div>
+                    <span class="upload-tip">Supports DOCX, PPTX, PDF, Images (PNG, JPG, WEBP via OCR), and TXT. Tip: You can also press <strong>Ctrl+V</strong> to paste a screenshot!</span>
+                    <input type="file" id="media-file-input" class="file-input" accept=".docx,.doc,.pptx,.ppt,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.txt">
+                    <div id="upload-status" class="upload-status"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content-input" class="form-label">
+                        News Content, Fact Claim, or Transcript <span style="color: var(--accent-red)">*</span>
+                    </label>
+                    <textarea 
+                        id="content-input" 
+                        class="textarea-content" 
+                        placeholder="Type or paste any news article, viral message, or factual claim here (e.g. 'Cows have 5 legs', 'Earth is flat', or any multilingual news in English, Hindi, Bengali, Odia, French, Japanese, etc.)..."
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Prominent Submit Action -->
+                <button type="submit" id="submit-btn" class="btn-primary">
+                    <span id="btn-text">Detect Authenticity & Verify Fact</span>
+                    <div id="btn-spinner" class="spinner" style="display: none;"></div>
+                </button>
+            </form>
+
+            <!-- 4. Dynamic Prediction Result Block -->
+            <div id="result-container">
+                <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 1.5rem 0;">
+
+                <!-- Status Banner -->
+                <div id="status-banner" class="status-banner verified">
+                    <span id="banner-text">🟢 VERIFIED / RELIABLE CONTENT</span>
+                    <span id="banner-tag" class="status-tag">VERIFIED BY ENGINE</span>
+                </div>
+
+                <!-- Fact-Check Advisory Note (if applicable) -->
+                <div id="fact-check-alert" class="fact-check-box"></div>
+
+                <!-- Confidence Score Bar -->
+                <div class="progress-section">
+                    <div class="progress-label-row">
+                        <span id="confidence-label">Reliability Confidence</span>
+                        <span id="confidence-val">94.6%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="progress-fill" class="progress-fill verified" style="width: 94.6%;"></div>
+                    </div>
+                </div>
+
+                <!-- Analysis Metadata (Two-column Grid) -->
+                <div class="metadata-grid">
+                    <div class="metadata-card">
+                        <div class="metadata-title">Text Word Count</div>
+                        <div class="metadata-val" id="meta-word-count">0 words</div>
+                    </div>
+                    <div class="metadata-card">
+                        <div class="metadata-title">Detected Language</div>
+                        <div class="metadata-val" id="meta-language">English</div>
+                    </div>
+                    <div class="metadata-card">
+                        <div class="metadata-title">Model Latency</div>
+                        <div class="metadata-val" id="meta-latency">14 ms</div>
+                    </div>
+                    <div class="metadata-card">
+                        <div class="metadata-title">Stylistic / Factual Index</div>
+                        <div class="metadata-val" id="meta-credibility">High (Objective Discourse)</div>
+                    </div>
+                </div>
+
+                <!-- Reset / Analyze Another Button -->
+                <button type="button" id="reset-btn" class="btn-secondary">
+                    Reset / Analyze Another Article or Claim
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 5. Footer -->
+    <footer class="footer">
+        <div class="footer-credit">Final Year Project | Department of Computer Science & Engineering</div>
+        <p class="footer-disclaimer">
+            Disclaimer: Output is generated via statistical pattern classification and empirical knowledge base for research and educational purposes.
+        </p>
+    </footer>
+
+    <!-- Client-side Interactive Logic & State Handling -->
+    <script>
+        // Curated Benchmark News Archive
+        const SAMPLE_ARCHIVE = {
+            isro_gaganyaan: {
+                content: "The Indian Space Research Organisation (ISRO) successfully conducted the qualification hot tests of the Service Module Propulsion System for the upcoming Gaganyaan human spaceflight mission at Mahendragiri. All propulsion systems operated as planned, meeting all reliability and safety parameters for astronaut transit."
+            },
+            rbi_security: {
+                content: "The Reserve Bank of India (RBI) announced revised cybersecurity and fraud mitigation frameworks for commercial banks and digital payment service providers. The directive mandates automated transaction anomaly detection and standardized customer grievance redressal timelines across all financial institutions."
+            },
+            nasa_jwst: {
+                content: "NASA's James Webb Space Telescope has captured definitive atmospheric signatures of a distant gas giant exoplanet. The peer-reviewed findings, published in Nature Astronomy by an international consortium of astrophysicists, reveal transmission spectroscopy indicating water vapor and carbon dioxide clouds without ambiguous anomalies."
+            },
+            fuel_ban: {
+                content: "URGENT WARNING! Secret leaked documents confirm that the government is immediately banning all petrol and diesel vehicles starting next month! Any citizen found driving private combustion vehicles will face heavy fines and instant vehicle impoundment. Share this notification immediately before authorities delete it!"
+            },
+            cure_herb: {
+                content: "SHOCKING SECRET: Researchers have uncovered that a rare wild mountain flower immediately eliminates every chronic ailment known to man in under 24 hours! Big pharmaceutical companies and corrupt authorities are deleting this post and threatening doctors who reveal the formula! Share this immediately before it is banned forever!"
+            },
+            cows: {
+                content: "A startling viral discovery claims that genetically unique cows have 5 legs and possess the physical ability to fly over mountain ranges without wings. Witnesses report seeing cattle with five limbs grazing in clouds."
+            },
+            water_temp: {
+                content: "Under standard atmospheric pressure of 1 atmosphere at sea level, pure liquid water exhibits a well-documented phase change boiling point of 100 degrees Celsius and freezes into solid crystalline ice at 0 degrees Celsius."
+            },
+            odia_it: {
+                content: "ଓଡ଼ିଶା ସରକାର ଭୁବନେଶ୍ୱରରେ ଅତ୍ୟାଧୁନିକ ସେମିକଣ୍ଡକ୍ଟର ନିର୍ମାଣ ୟୁନିଟ୍ ଏବଂ ନୂତନ ସଫ୍ଟୱେୟାର ଟେକ୍ନୋଲୋଜି ପାର୍କ ପ୍ରତିଷ୍ଠା ପାଇଁ ଚୁକ୍ତି ସ୍ୱାକ୍ଷର କରିଛନ୍ତି। ଏହି ପ୍ରକଳ୍ପ ଦ୍ୱାରା ରାଜ୍ୟରେ ହଜାର ହଜାର ଯୁବକ ଯୁବତୀଙ୍କୁ ନିଯୁକ୍ତି ସୁଯୋଗ ମିଳିବ ବୋଲି ଶିଳ୍ପ ବିଭାଗ ସୂଚନା ଦେଇଛି।"
+            },
+            odia_metro: {
+                content: "ଭୁବନେଶ୍ୱର ବିମାନବନ୍ଦରରୁ ତ୍ରିଶୁଳିଆ ପର୍ଯ୍ୟନ୍ତ ନିର୍ମାଣ ହେଉଥିବା ମେଟ୍ରୋ ରେଳ ପ୍ରକଳ୍ପ କାର୍ଯ୍ୟ ନିର୍ଦ୍ଧାରିତ ସମୟ ସୀମା ମଧ୍ୟରେ ଶେଷ କରିବାକୁ ନିର୍ଦ୍ଦେଶ ଦିଆଯାଇଛି। ସହରରେ ଯାତାୟାତ ସୁବିଧା ପାଇଁ ଏହି ମେଟ୍ରୋ ବ୍ୟବସ୍ଥା ଏକ ବଡ଼ ପଦକ୍ଷେପ ହେବ।"
+            },
+            odia_cure: {
+                content: "ଚମତ୍କାର ଆୟୁର୍ବେଦିକ ଖବର! ଜଙ୍ଗଲରେ ମିଳୁଥିବା ଏକ ବିଶେଷ ଚେର ଖାଇଲେ ମାତ୍ର ଗୋଟିଏ ରାତିରେ ସବୁ ପ୍ରକାର ଜଟିଳ ରୋଗ ଭଲ ହୋଇଯାଉଛି। ଡାକ୍ତରମାନେ ଏହି ରହସ୍ୟ ଲୁଚାଇ ରଖିଛନ୍ତି, ତେଣୁ ଲିଙ୍କ କଟିବା ପୂର୍ବରୁ ଏହାକୁ ସମସ୍ତଙ୍କ ପାଖକୁ ପଠାନ୍ତୁ!"
+            },
+            odia_cows: {
+                content: "ଏକ ଆଶ୍ଚର୍ଯ୍ୟଜନକ ଗୋପନୀୟ ଖବର ଅନୁସାରେ ଗାଈମାନଙ୍କର ୫ଟି ଗୋଡ଼ ଥାଏ ଏବଂ ସେମାନେ ରାତାରାତି ଆକାଶରେ ଉଡ଼ିପାରନ୍ତି। ଡାକ୍ତରମାନେ ଏହାକୁ ଲୁଚାଉଛନ୍ତି, ତୁରନ୍ତ ସମସ୍ତଙ୍କୁ ସେୟାର କରନ୍ତୁ!"
+            },
+            hindi_gaganyaan: {
+                content: "भारतीय अंतरिक्ष अनुसंधान संगठन (इसरो) ने गगनयान मानव अंतरिक्ष उड़ान मिशन के तहत क्रू मॉड्यूल प्रपल्शन सिस्टम का सफल परीक्षण पूरा किया। वैज्ञानिकों ने बताया कि सभी तकनीकी मानक परीक्षण के दौरान पूरी तरह से सुरक्षित और सटीक पाए गए।"
+            },
+            hindi_rbi: {
+                content: "भारतीय रिज़र्व बैंक (आरबीआई) ने वित्तीय धोखाधड़ी रोकने के लिए सभी बैंकों और डिजिटल पेमेंट गेटवे के लिए नए सुरक्षा नियम लागू किए हैं। नए नियमों के तहत संदिग्ध लेन-देन की रीयल-टाइम निगरानी अनिवार्य की गई है।"
+            },
+            hindi_cure: {
+                content: "सावधान! गुप्त सूत्रों से बड़ा खुलासा हुआ है कि मात्र हल्दी और उबला पानी पीने से हर प्रकार का कैंसर और गंभीर बीमारी 24 घंटे में ठीक हो जाती है। बड़ी दवा कंपनियां और सरकार इस चमत्कारिक नुस्खे को दबा रही हैं। इसे तुरंत शेयर करें!"
+            },
+            bengali_space: {
+                content: "ভারতীয় মহাকাশ গবেষণা সংস্থা (ইসরো) তাদের পরবর্তী মহাকাশ অভিযান এবং গভীর মহাকাশ অনুসন্ধানের জন্য নতুন রূপরেখা প্রকাশ করেছে। বিজ্ঞান সম্মেলনে মহাকাশবিজ্ঞানীরা কৃত্রিম উপগ্রহ ও মিশন ডেটা বিশ্লেষণের অগ্রগতি তুলে ধরেন।"
+            },
+            bengali_cure: {
+                content: "চমকপ্রদ গোপন খবর! হিমালয়ের একটি দুর্লভ পাতা চিবিয়ে খেলে মাত্র ২৪ ঘণ্টায় সকল ডায়াবেটিস ও জটিল রোগ নির্মূল হয়ে যায়। ডাক্তাররা এই মহাঔষধ লুকিয়ে রাখছে। ডিলিট হওয়ার আগেই পোস্টটি শেয়ার করুন!"
+            },
+            french_jwst: {
+                content: "Les données spectroscopiques du télescope spatial James Webb ont formellement identifié des molécules d'eau dans l'atmosphère d'une exoplanète géante gazeuse. Les astrophysiciens du consortium international ont validé ces mesures rigoureuses."
+            },
+            french_cure: {
+                content: "URGENT! Les élites mondiales et les autorités pharmaceutiques censurent la vérité sur une herbe miraculeuse qui guérit instantanément le cancer et toutes les infections en une seule nuit! Partagez avant censure totale!"
+            },
+            spanish_who: {
+                content: "La Organización Mundial de la Salud (OMS) presentó directrices epidemiológicas actualizadas basadas en estudios clínicos revisados por pares. Los ministerios de salud confirmaron una estabilización en la transmisión comunitaria."
+            },
+            spanish_cure: {
+                content: "¡COMPÁRTELO ANTES DE QUE LO BORREN! Un científico desvela el remedio prohibido que cura el cáncer en 24 horas y que los gobiernos corruptos quieren censurar. Despierta y no dejes que oculten este secreto medicinal."
+            },
+            german_energy: {
+                content: "Das Bundesgesundheitsministerium hat in Zusammenarbeit mit führenden Forschungsinstituten aktualisierte medizinische Standards vorgelegt. Die Daten belegen eine kontinuierliche Verbesserung der Patientenversorgung."
+            },
+            german_conspiracy: {
+                content: "Ein ehemaliger Regierungsberater bricht sein Schweigen: Neue Funkmasten strahlen Frequenzen aus, um das Verhalten der Bevölkerung heimlich zu manipulieren! Offizielle Medien zensieren diesen Skandal sofort!"
+            },
+            japanese_jaxa: {
+                content: "宇宙航空研究開発機構（JAXA）の探査チームは、小惑星表面からの高精度サンプル回収ミッションが成功裏に完了したと発表しました。採取されたカプセルは地球に帰還し、詳細な科学分析が進められています。"
+            },
+            japanese_cure: {
+                content: "極秘文書が流出！山奥に自生するある植物のエキスが、末期がんを含む全ての慢性疾患をわずか一晩で消滅させることが判明しました！製薬会社が圧力をかけて情報を削除しています！今すぐ拡散してください！"
+            }
+        };
+
+        // DOM Elements
+        const form = document.getElementById('news-form');
+        const sampleDropdown = document.getElementById('sample-dropdown');
+        const contentInput = document.getElementById('content-input');
+        const mediaFileInput = document.getElementById('media-file-input');
+        const uploadStatus = document.getElementById('upload-status');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const resultContainer = document.getElementById('result-container');
+        const statusBanner = document.getElementById('status-banner');
+        const bannerText = document.getElementById('banner-text');
+        const bannerTag = document.getElementById('banner-tag');
+        const factCheckAlert = document.getElementById('fact-check-alert');
+        const confidenceLabel = document.getElementById('confidence-label');
+        const confidenceVal = document.getElementById('confidence-val');
+        const progressFill = document.getElementById('progress-fill');
+        const metaWordCount = document.getElementById('meta-word-count');
+        const metaLanguage = document.getElementById('meta-language');
+        const metaLatency = document.getElementById('meta-latency');
+        const metaCredibility = document.getElementById('meta-credibility');
+        const resetBtn = document.getElementById('reset-btn');
+
+        function showUploadStatus(msg, isPending = false) {
+            uploadStatus.style.display = 'block';
+            uploadStatus.textContent = msg;
+            uploadStatus.style.color = isPending ? 'var(--accent-blue)' : 'var(--accent-green)';
+        }
+
+        // Dropdown selection handler
+        sampleDropdown.addEventListener('change', () => {
+            const key = sampleDropdown.value;
+            if (key && SAMPLE_ARCHIVE[key]) {
+                contentInput.value = SAMPLE_ARCHIVE[key].content;
+                resultContainer.classList.remove('visible');
+                uploadStatus.style.display = 'none';
+            }
+        });
+
+        // File Uploader Handler (DOCX, PPTX, PDF, Images via OCR, TXT)
+        mediaFileInput.addEventListener('change', async () => {
+            if (!mediaFileInput.files || mediaFileInput.files.length === 0) return;
+            const file = mediaFileInput.files[0];
+            showUploadStatus(`Extracting content from ${file.name}...`, true);
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/upload_media', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success && data.text) {
+                    contentInput.value = data.text;
+                    showUploadStatus(`✅ Extracted text successfully from ${data.file_type} (${file.name})!`, false);
+                } else {
+                    showUploadStatus(`⚠️ Could not extract text: ${data.error || 'Empty text'}`, false);
+                }
+            } catch (err) {
+                showUploadStatus(`⚠️ Upload error: ${err.message}`, false);
+            }
+        });
+
+        // Clipboard Image Paste Listener (Paste screenshot directly via Ctrl+V)
+        window.addEventListener('paste', async (e) => {
+            const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+            if (!items) return;
+
+            for (let item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    e.preventDefault();
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = async (event) => {
+                        const base64Data = event.target.result;
+                        showUploadStatus('📸 Scanning pasted screenshot using local OCR engine...', true);
+                        try {
+                            const res = await fetch('/upload_media', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ image_base64: base64Data })
+                            });
+                            const data = await res.json();
+                            if (data.success && data.text) {
+                                contentInput.value = data.text;
+                                showUploadStatus('✅ Successfully extracted text from pasted image via OCR!', false);
+                            } else {
+                                showUploadStatus('⚠️ OCR did not detect legible text in pasted image.', false);
+                            }
+                        } catch (err) {
+                            showUploadStatus('⚠️ Paste OCR failed: ' + err.message, false);
+                        }
+                    };
+                    reader.readAsDataURL(blob);
+                    break;
+                }
+            }
+        });
+
+        // Reset Handler
+        resetBtn.addEventListener('click', () => {
+            contentInput.value = '';
+            sampleDropdown.value = '';
+            mediaFileInput.value = '';
+            uploadStatus.style.display = 'none';
+            resultContainer.classList.remove('visible');
+            contentInput.focus();
+        });
+
+        // Form Submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = contentInput.value.trim();
+            if (!text) return;
+
+            // UI Loading state
+            submitBtn.disabled = true;
+            btnText.textContent = "Analyzing Multilingual & Factual Patterns...";
+            btnSpinner.style.display = "inline-block";
+            resultContainer.classList.remove('visible');
+
+            try {
+                let predictionData = null;
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ headline: "", text: text })
+                });
+                if (response.ok) {
+                    predictionData = await response.json();
+                }
+
+                if (predictionData) {
+                    renderResults(predictionData);
+                }
+
+            } catch (err) {
+                console.error("Classification error:", err);
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = "Detect Authenticity & Verify Fact";
+                btnSpinner.style.display = "none";
+            }
+        });
+
+        // Render Results UI
+        function renderResults(data) {
+            const isReliable = data.prediction === "REAL" || data.prediction === "RELIABLE";
+            const isFactCheck = data.fact_check_flag;
+
+            if (isReliable) {
+                statusBanner.className = "status-banner verified";
+                bannerText.textContent = "🟢 VERIFIED / RELIABLE CONTENT";
+                bannerTag.textContent = "VERIFIED BY ENGINE";
+                confidenceLabel.textContent = "Reliability Confidence Score";
+                confidenceVal.textContent = data.confidence + "%";
+                progressFill.className = "progress-fill verified";
+                progressFill.style.width = data.confidence + "%";
+            } else {
+                statusBanner.className = "status-banner fake";
+                bannerText.textContent = isFactCheck ? "🔴 FACT CHECK: FALSE / DECEPTIVE CLAIM" : "🔴 WARNING: FAKE / UNRELIABLE CONTENT";
+                bannerTag.textContent = isFactCheck ? "EMPIRICAL FALLACY" : "DECEPTIVE PATTERNS";
+                confidenceLabel.textContent = "Deception Likelihood Score";
+                confidenceVal.textContent = data.confidence + "%";
+                progressFill.className = "progress-fill fake";
+                progressFill.style.width = data.confidence + "%";
+            }
+
+            if (isFactCheck && data.fact_check_note) {
+                factCheckAlert.style.display = 'block';
+                factCheckAlert.innerHTML = `<strong>⚠️ Empirical Fact-Check Advisory:</strong> ${data.fact_check_note}`;
+            } else {
+                factCheckAlert.style.display = 'none';
+            }
+
+            metaWordCount.textContent = (data.word_count || 0) + " words";
+            metaLanguage.textContent = data.language_name || "English";
+            metaLatency.textContent = (data.latency_ms || 12) + " ms";
+            metaCredibility.textContent = data.credibility_style || (isReliable ? "High (Objective Discourse)" : "Low (Sensationalist Syntax)");
+
+            resultContainer.classList.add('visible');
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
