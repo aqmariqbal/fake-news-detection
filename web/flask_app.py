@@ -34,12 +34,14 @@ else:
 
 
 @app.route("/")
+@app.route("/api/index")
 def index():
     """Serves the clean minimal single-column interface."""
     return render_template("index.html")
 
 
 @app.route("/upload_media", methods=["POST"])
+@app.route("/api/index/upload_media", methods=["POST"])
 def upload_media():
     """
     Accepts uploaded documents (DOCX, PPTX, PDF, TXT) or Images (PNG, JPG, WEBP)
@@ -83,6 +85,7 @@ def upload_media():
 
 
 @app.route("/predict", methods=["POST"])
+@app.route("/api/index/predict", methods=["POST"])
 def predict():
     """API endpoint for multilingual news & fact-checking evaluation."""
     data = request.get_json(silent=True) or request.form.to_dict()
